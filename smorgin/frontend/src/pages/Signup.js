@@ -1,5 +1,5 @@
 import { Spacer, Flex, useToast} from "@chakra-ui/react";
-import LogInAndSignUpForm from "../components/forms";
+import LogInAndSignUpForm from "../components/LogInAndSignUpForm";
 import { ThemeToggleButton } from "../components/common";
 import httpClient from "../httpClient";
 
@@ -8,17 +8,10 @@ const SignUp = () => {
 
   const toast = useToast();
 
-  async function handleSubmit(values, actions) {
+  async function handleSubmit(values) {
     try{
       await httpClient.post("/signup",values);
-      toast({
-        description: "Your account have been created. Redirecting you to the dashboard. 😀",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-        position: "top"
-      });
-      setTimeout(()=>{document.location.href = "/dashboard"}, 5000);
+      document.location.href = "/dashboard"
     } catch (error) {
       let description = error.response.data.error;
       toast({

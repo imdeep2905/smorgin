@@ -3,7 +3,6 @@ import { Formik, Form, Field } from "formik"
 
 const LogInAndSignUpForm = (props) => {
   const formType = props.type;
-  const theme = useColorModeValue("light", "dark");
 
   function validateUsername(value) {
     if (!value) 
@@ -18,7 +17,7 @@ const LogInAndSignUpForm = (props) => {
     <Flex flexDirection="column" width="100wh" height="80vh" justifyContent="center" alignItems="center">
       <VStack>
         <Heading size="lg" paddingBottom="5%">Welcome to Smorgin 📈 !</Heading>
-        <Box backgroundColor={theme === "dark" ? "gray.900" : "gray.50"} w="sm"  p="5%" borderWidth="1px" borderRadius="lg" >
+        <Box backgroundColor={useColorModeValue("gray.50", "gray.900")} w="sm"  p="5%" borderWidth="1px" borderRadius="lg" >
           <Formik
             initialValues={{ username: "", password: "" }}
             onSubmit={props.handleSubmit}
