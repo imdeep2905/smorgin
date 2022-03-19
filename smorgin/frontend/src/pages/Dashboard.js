@@ -1,55 +1,54 @@
 import { React, useState, useEffect } from "react";
-import { Flex, Spacer, VStack, Heading, Button } from "@chakra-ui/react";
+import { Flex, Spacer, useToast } from "@chakra-ui/react";
 import { ThemeToggleButton } from "../components/common";
 import { FullPageSpinner } from "../components/common";
 import httpClient from "../httpClient";
+import Navbar from "../components/Navbar";
 
 const Dashboard = () => {
 
+  const toast = useToast();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
-        let resp = await httpClient.get("/@me");
+        let resp;
+        try{
+          resp = await httpClient.get("/@me");
+        } catch(error) {
+          document.location.href = "login";
+        }
         setUser(resp.data);
+        for (const [category, msg] of resp.data._flashes) {
+          toast({
+            description: msg,
+            status: category,
+            duration: 9000,
+            isClosable: true,
+            position: "top"
+          });
+        }
       } catch (error) {
-        document.location.href = "login";
+        // TODO: Handle this error
       }
     })();
   }, []);
 
-  async function logout() {
-    try {
-      await httpClient.post("/logout");
-      document.location.href = "login";
-    } catch(err) {
-      // TODO : Handle This Error.
-    }
-  }
-
   return (
     <>
-      <Flex p={4}>
-        <Spacer/>
-        <ThemeToggleButton/>
-      </Flex>
       {
         user === null 
         ?
-          <FullPageSpinner/>
+          <>
+            <Flex p={4}>
+              <Spacer/>
+              <ThemeToggleButton/>
+            </Flex>
+            <FullPageSpinner/>
+          </>
         :
-          <VStack paddingTop={"10%"}>
-            <Heading size="2xl">Welcome {user.username} !</Heading>
-            <Button
-              mt={4}
-              colorScheme="teal"
-              type="submit"
-              onClick={() => {logout();}}
-            >
-              Logout
-            </Button>
-          </VStack>
+          <Navbar/>
       }
     </>
   );

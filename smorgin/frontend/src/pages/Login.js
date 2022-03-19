@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Spacer, Flex, useToast } from "@chakra-ui/react";
 import { useSearchParams } from "react-router-dom";
-import LogInAndSignUpForm from "../components/forms";
+import LogInAndSignUpForm from "../components/LogInAndSignUpForm";
 import { ThemeToggleButton } from "../components/common";
 import httpClient from "../httpClient";
 import { FullPageSpinner } from "../components/common";
@@ -21,18 +21,27 @@ const Login = () => {
       } catch (error) {
         // An error occurred (most probably 401). Regardless of the error, force user to login again.
         setIsLoading(false);
+        for (const [category, msg] of error.response.data._flashes) {
+          toast({
+            description: msg,
+            status: category,
+            duration: 9000,
+            isClosable: true,
+            position: "top"
+          });
+        }
       }
     })();
   }, []);
 
-  async function handleSubmit(values, actions) {
+  async function handleSubmit(values) {
     try {
       await httpClient.post("/login", values);
       document.location.href = urlParams.get("returnTo") === null ? "dashboard" : urlParams.get("returnTo");
     } catch (error) {
       let description = error.response.data.error;
       toast({
-        description:( description === null || description === undefined ? "Something went wrong. 😣" : description),
+        description:( description == undefined ? "Something went wrong. 😣" : description),
         status: "error",
         duration: 9000,
         isClosable: true,
