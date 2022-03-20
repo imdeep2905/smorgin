@@ -7,7 +7,6 @@ import httpClient from "../httpClient";
 import { FullPageSpinner } from "../components/common";
 
 const Login = () => {
-
   const toast = useToast();
   const [urlParams, _] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +26,7 @@ const Login = () => {
             status: category,
             duration: 9000,
             isClosable: true,
-            position: "top"
+            position: "top",
           });
         }
       }
@@ -37,32 +36,34 @@ const Login = () => {
   async function handleSubmit(values) {
     try {
       await httpClient.post("/login", values);
-      document.location.href = urlParams.get("returnTo") === null ? "dashboard" : urlParams.get("returnTo");
+      document.location.href =
+        urlParams.get("returnTo") === null
+          ? "dashboard"
+          : urlParams.get("returnTo");
     } catch (error) {
       let description = error.response.data.error;
       toast({
-        description:( description == undefined ? "Something went wrong. 😣" : description),
+        description:
+          description == undefined ? "Something went wrong. 😣" : description,
         status: "error",
         duration: 9000,
         isClosable: true,
-        position: "top"
+        position: "top",
       });
     }
   }
 
   return (
     <>
-      <Flex p={4} height="10vh" >
-        <Spacer/>
+      <Flex p={4} height="10vh">
+        <Spacer />
         <ThemeToggleButton />
       </Flex>
-      {
-        isLoading
-        ?
-          <FullPageSpinner/>
-        :
-          <LogInAndSignUpForm type="login" handleSubmit={handleSubmit} />
-      }
+      {isLoading ? (
+        <FullPageSpinner />
+      ) : (
+        <LogInAndSignUpForm type="login" handleSubmit={handleSubmit} />
+      )}
     </>
   );
 };

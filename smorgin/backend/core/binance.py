@@ -30,7 +30,7 @@ class BinanceCredentials(MethodView):
             client = Client(
                 request.json["api_key"],
                 request.json["secret_key"],
-                testnet=True,
+                testnet=request.json["testnet"],
             )
             client.get_asset_balance(recvWindow=60000, asset="ETH")
             json.dump(
