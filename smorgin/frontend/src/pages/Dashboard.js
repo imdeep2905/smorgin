@@ -6,7 +6,6 @@ import httpClient from "../httpClient";
 import Navbar from "../components/Navbar";
 
 const Dashboard = () => {
-
   const toast = useToast();
   const [user, setUser] = useState(null);
 
@@ -14,9 +13,9 @@ const Dashboard = () => {
     (async () => {
       try {
         let resp;
-        try{
+        try {
           resp = await httpClient.get("/@me");
-        } catch(error) {
+        } catch (error) {
           document.location.href = "login";
         }
         setUser(resp.data);
@@ -26,7 +25,7 @@ const Dashboard = () => {
             status: category,
             duration: 9000,
             isClosable: true,
-            position: "top"
+            position: "top",
           });
         }
       } catch (error) {
@@ -37,19 +36,17 @@ const Dashboard = () => {
 
   return (
     <>
-      {
-        user === null 
-        ?
-          <>
-            <Flex p={4}>
-              <Spacer/>
-              <ThemeToggleButton/>
-            </Flex>
-            <FullPageSpinner/>
-          </>
-        :
-          <Navbar/>
-      }
+      {user === null ? (
+        <>
+          <Flex p={4}>
+            <Spacer />
+            <ThemeToggleButton />
+          </Flex>
+          <FullPageSpinner />
+        </>
+      ) : (
+        <Navbar />
+      )}
     </>
   );
 };
